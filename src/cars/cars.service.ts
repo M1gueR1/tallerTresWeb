@@ -20,8 +20,12 @@ export class CarsService {
     private readonly carsModel: Model<Car>,
   ) {}
 
-  async findAll() {
-    return this.carsModel.find();
+  async findAll(limit: number = 10, skip: number = 0) {
+    return this.carsModel.find().limit(limit).skip(skip);
+  }
+
+  search(q: string) {
+    return this.carsModel.find({ nombre: { $regex: q, $options: 'i' } });
   }
 
   async findOne(id: string) {
@@ -73,6 +77,8 @@ export class CarsService {
 
     return;
   }
+
+  
 
   private handleException(error: any) {
     if (error.code === 11000) {
