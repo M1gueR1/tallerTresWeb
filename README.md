@@ -74,7 +74,7 @@ Para solucionarlo, se miraría el archivo cars.module.ts y se verificaría que s
 
 Hay una ventaja cuando no se pone un findOne() antes del deleteOne, y es una consulta menos en la base de datos. En pocas palabras, solo hace una query en lugar de dos. Es más eficiente, pues ejecuta dicha operación en una sola operación atómica. Adicionalmente, notemos que podría presentarse un escenario de Race Condition, pues podría darse que entre 2 queries separadas el documento sea borrado por otra operación externa entre el findOne y el deleteOne. Notemos que esto podría llevar a posibles inconsistencias y fallas, pues en un inicio se hubiese verificado que existía el documento por el findOne(), pero puede que entre esas 2 queries se haya eliminado.
 
-Puntualmente, el escenario en que deletedCount es 0 ocurre cuando se pasa un id que tiene formato válido de ObjectId (pues ParseMongoIdPipe ya garantiza eso) pero que simplemente no corresponde a ningún documento existente en la base de datos. Por ejemplo, un id como 507f1f77bcf86cd799439011 es perfectamente válido en cuanto a formato, pero si no existe ningún carro con ese _id en la colección, deleteOne no elimina nada y retorna deletedCount: 0, lo cual dispara el BadRequestException.
+Puntualmente, el escenario en que deletedCount es 0 ocurre cuando se pasa un id que tiene formato válido de ObjectId (pues ParseMongoIdPipe ya garantiza eso) pero que simplemente no corresponde a ningún documento existente en la base de datos. Por ejemplo, podría darse de tener un id perfectamente válido en cuanto a formato respecta. Sin embargo, si no existe ningún carro con ese _id en la colección, deleteOne no elimina nada y retorna deletedCount: 0, lo cual dispara el BadRequestException.
 
 ---
 
